@@ -7,4 +7,7 @@ commands:
   join:
     description: Adds player to team
     usage: "Usage: /<command> [red|blue|none]"
-    aliases: ["join red", "join blue", "join none"]
+    aliases: ["join Red", "join Blue", "join None"]
+  start:
+    description: Starts the game
+    usage: "Usage: /<command>"
