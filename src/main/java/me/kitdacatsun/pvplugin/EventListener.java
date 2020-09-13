@@ -9,6 +9,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.potion.PotionEffect;
 
 import static org.bukkit.Bukkit.getServer;
+import static me.kitdacatsun.pvplugin.PVPlugin.*;
 
 public class EventListener implements Listener {
     @EventHandler
@@ -36,5 +37,9 @@ public class EventListener implements Listener {
 
         String commandLine = "team join NoTeam";
         getServer().dispatchCommand(player, commandLine);
+        
+        if (inGame > 1) {
+            inGame--;
+        }
     }
 }

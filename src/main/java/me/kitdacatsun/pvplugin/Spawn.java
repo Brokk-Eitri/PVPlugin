@@ -1,23 +1,21 @@
 package me.kitdacatsun.pvplugin;
 
-import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class EndGame implements CommandExecutor {
+import static me.kitdacatsun.pvplugin.PVPlugin.*;
 
+public class Spawn implements CommandExecutor {
+    
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        for (int i = 0; i < PVPlugin.spawnBarriers.length; i++) {
-            Location location = PVPlugin.spawnBarriers[i];
-            location.getBlock().setType(PVPlugin.spawnBarrierBlock);
+        if (sender instanceof Player) {
+            inGame--;
+            ((Player)sender).setHealth(-1);
         }
-        
-        PVPlugin.ready = 0;
-        PVPlugin.inGame = 0;
-
-        return true;
+        return false;
     }
 }

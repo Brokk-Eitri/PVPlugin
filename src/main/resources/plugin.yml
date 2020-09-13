@@ -14,3 +14,8 @@ commands:
   endgame:
     description: Ends the game
     aliases: ["eg"]
+  spawn:
+    description: Sends player to spawn
+  readt:
+    description: Sets player as ready
+    aliases: ["r"]

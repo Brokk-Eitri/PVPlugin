@@ -61,6 +61,8 @@ public class Join implements CommandExecutor {
         // Teleport player to start position
         int rnd = new Random().nextInt(team.spawnPoints.length);
         player.teleport(team.spawnPoints[rnd]);
+        
+        inGame++;
 
         return true;
     }
