@@ -8,12 +8,11 @@ import org.bukkit.potion.PotionEffect;
 import java.util.ArrayList;
 
 import static org.bukkit.Bukkit.dispatchCommand;
-import static org.bukkit.Bukkit.getServer;
 
 public final class PVPlugin extends JavaPlugin {
-    
+
     public static Location lobby;
-    
+
     public static Team[] teams;
     public static Location[] spawnBarriers;
     public static Material spawnBarrierBlock;
@@ -24,8 +23,8 @@ public final class PVPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         System.out.println("Started Up");
-        
-        lobby = new Location(Bukkit.getWorld("world"), 0.5, 248, 0, 0, 0);
+
+        lobby = new Location(Bukkit.getWorld("world_nether"), 0.5, 125, 0.5, 0, 0);
 
         World nether = Bukkit.getWorld("world_nether");
 
@@ -64,10 +63,10 @@ public final class PVPlugin extends JavaPlugin {
     public static void resetPlayer(Player player) {
         player.teleport(lobby);
         player.setGameMode(GameMode.ADVENTURE);
-        
+
         player.getInventory().clear();
         player.updateInventory();
-        
+
         player.setHealth(20);
         player.setExp(0);
         player.setLevel(0);

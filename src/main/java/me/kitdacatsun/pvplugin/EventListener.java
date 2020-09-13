@@ -7,7 +7,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
-import static org.bukkit.Bukkit.getServer;
 import static me.kitdacatsun.pvplugin.PVPlugin.*;
 
 public class EventListener implements Listener {
@@ -15,6 +14,7 @@ public class EventListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         resetPlayer(player);
+        player.setBedSpawnLocation(lobby);
     }
 
     @EventHandler
