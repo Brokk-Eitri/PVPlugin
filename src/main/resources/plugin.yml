@@ -10,9 +10,7 @@ commands:
     aliases: ["join Red", "join Blue", "join None"]
   startgame:
     description: Starts the game
-    usage: "Usage: /<command>"
     aliases: ["sg"]
   endgame:
     description: Ends the game
-    usage: "Usage: /<command>"
     aliases: ["eg"]

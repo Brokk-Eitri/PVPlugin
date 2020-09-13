@@ -1,10 +1,13 @@
 package me.kitdacatsun.pvplugin;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
 
 import java.util.ArrayList;
 
@@ -13,7 +16,6 @@ public final class PVPlugin extends JavaPlugin {
     public static Team[] teams;
     public static Location[] spawnBarriers;
     public static Material spawnBarrierBlock;
-    public static ArrayList<PlayerInfo> playerInfos;
 
     @Override
     public void onEnable() {
@@ -41,12 +43,14 @@ public final class PVPlugin extends JavaPlugin {
 
         spawnBarrierBlock = Material.IRON_BARS;
 
-        playerInfos = new ArrayList<PlayerInfo>(){};
-
         this.getCommand("join").setExecutor(new Join());
         this.getCommand("startgame").setExecutor(new StartGame());
         this.getCommand("endgame").setExecutor(new EndGame());
+
+        getServer().getPluginManager().registerEvents(new EventListener(), this);
     }
+
+
 }
 
 

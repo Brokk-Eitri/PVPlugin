@@ -1,7 +1,6 @@
 package me.kitdacatsun.pvplugin;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
+import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -11,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
 
+import static me.kitdacatsun.pvplugin.PVPlugin.*;
 import static org.bukkit.Bukkit.*;
 
 public class Join implements CommandExecutor {
@@ -19,16 +19,16 @@ public class Join implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
         // Ensure correct number of args
-        if (args.length < 1) {
+        if (args.length < 2) {
             sender.sendMessage("Invalid arguments");
             return false;
         }
 
         // Ensure team is valid
         Team team = null;
-        for (int i = 0; i < PVPlugin.teams.length; i++) {
-            if (PVPlugin.teams[i].name.equalsIgnoreCase(args[0])) {
-                team = PVPlugin.teams[i];
+        for (Team value : teams) {
+            if (value.name.equalsIgnoreCase(args[0])) {
+                team = value;
                 break;
             }
         }
@@ -39,12 +39,7 @@ public class Join implements CommandExecutor {
         }
 
         // Get player
-        Player player;
-        if (args.length > 1) {
-            player = getServer().getPlayer(args[1]);
-        } else {
-            player = (Player)sender;
-        }
+        Player player = (Player)CommandUtils.getTargets(sender, args[1])[0];
 
         if (player == null) {
             sender.sendMessage("Player not found");
@@ -52,7 +47,9 @@ public class Join implements CommandExecutor {
         }
 
         // Reset player
+        player.setGameMode(GameMode.ADVENTURE);
         player.setHealth(20);
+        player.setExp(0);
         for (PotionEffect effect : player.getActivePotionEffects()) {
             player.removePotionEffect(effect.getType());
         }
@@ -62,11 +59,8 @@ public class Join implements CommandExecutor {
         getServer().dispatchCommand(sender, commandLine);
 
         // Teleport player to start position
-        int i = new Random().nextInt(team.spawnPoints.length);
-        player.teleport(team.spawnPoints[i]);
-
-        // Add Player to list if not there already
-        PVPlugin.playerInfos.add(new PlayerInfo(team, player));
+        int rnd = new Random().nextInt(team.spawnPoints.length);
+        player.teleport(team.spawnPoints[rnd]);
 
         return true;
     }
