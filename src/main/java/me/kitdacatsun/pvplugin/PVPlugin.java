@@ -3,8 +3,12 @@ package me.kitdacatsun.pvplugin;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
 
 import java.util.ArrayList;
+
+import static org.bukkit.Bukkit.dispatchCommand;
+import static org.bukkit.Bukkit.getServer;
 
 public final class PVPlugin extends JavaPlugin {
     
@@ -57,7 +61,22 @@ public final class PVPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new EventListener(), this);
     }
 
+    public static void resetPlayer(Player player) {
+        player.teleport(lobby);
+        player.setGameMode(GameMode.ADVENTURE);
+        
+        player.getInventory().clear();
+        player.updateInventory();
+        
+        player.setHealth(20);
+        player.setExp(0);
+        player.setLevel(0);
+        for (PotionEffect effect : player.getActivePotionEffects()) {
+            player.removePotionEffect(effect.getType());
+        }
 
+        dispatchCommand(player, "team join NoTeam");
+    }
 }
 
 

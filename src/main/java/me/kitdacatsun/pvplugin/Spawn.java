@@ -1,7 +1,5 @@
 package me.kitdacatsun.pvplugin;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -16,7 +14,7 @@ public class Spawn implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player) {
             inGame.remove(sender);
-            ((Player)sender).teleport(lobby);
+            resetPlayer((Player)sender);
         }
         return false;
     }

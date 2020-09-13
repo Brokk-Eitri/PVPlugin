@@ -21,7 +21,7 @@ public class EndGame implements CommandExecutor {
         }
 
         for (Player player : inGame) {
-            player.teleport(lobby);
+            resetPlayer(player);
         }
 
         ready = new ArrayList<>();
