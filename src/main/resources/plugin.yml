@@ -1,0 +1,4 @@
+name: PVPlugin
+version: ${project.version}
+main: me.kitdacatsun.pvplugin.PVPlugin
+api-version: 1.16
