@@ -6,11 +6,11 @@ public final class PVPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        // Plugin startup logic
+        System.out.println("Started Up");
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        System.out.println("Shut Down");
     }
 }
