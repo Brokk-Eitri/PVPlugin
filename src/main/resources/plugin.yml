@@ -8,6 +8,11 @@ commands:
     description: Adds player to team
     usage: "Usage: /<command> [red|blue|none]"
     aliases: ["join Red", "join Blue", "join None"]
-  start:
+  startgame:
     description: Starts the game
     usage: "Usage: /<command>"
+    aliases: ["sg"]
+  endgame:
+    description: Ends the game
+    usage: "Usage: /<command>"
+    aliases: ["eg"]

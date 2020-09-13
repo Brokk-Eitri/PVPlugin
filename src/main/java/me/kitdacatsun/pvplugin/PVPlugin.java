@@ -6,11 +6,14 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.ArrayList;
+
 public final class PVPlugin extends JavaPlugin {
 
     public static Team[] teams;
     public static Location[] spawnBarriers;
     public static Material spawnBarrierBlock;
+    public static ArrayList<PlayerInfo> playerInfos;
 
     @Override
     public void onEnable() {
@@ -29,14 +32,20 @@ public final class PVPlugin extends JavaPlugin {
                 })
         };
 
-        spawnBarriers = new Location[] {
-
+        spawnBarriers = new Location[]{
+                new Location(nether, 10, 129, 0,0,0),
+                new Location(nether, 10, 130, 0,0,0),
+                new Location(nether, -10, 129, 0,0,0),
+                new Location(nether, -10, 130, 0,0,0),
         };
 
-        spawnBarrierBlock  = Material.IRON_BARS;
+        spawnBarrierBlock = Material.IRON_BARS;
+
+        playerInfos = new ArrayList<PlayerInfo>(){};
 
         this.getCommand("join").setExecutor(new Join());
-        this.getCommand("start").setExecutor(new Start());
+        this.getCommand("startgame").setExecutor(new StartGame());
+        this.getCommand("endgame").setExecutor(new EndGame());
     }
 }
 

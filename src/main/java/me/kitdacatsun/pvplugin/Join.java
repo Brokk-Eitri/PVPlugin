@@ -17,7 +17,6 @@ public class Join implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        sender.sendMessage(((Player)sender).getWorld().getName());
 
         // Ensure correct number of args
         if (args.length < 1) {
@@ -46,7 +45,7 @@ public class Join implements CommandExecutor {
         } else {
             player = (Player)sender;
         }
-        
+
         if (player == null) {
             sender.sendMessage("Player not found");
             return false;
@@ -65,6 +64,9 @@ public class Join implements CommandExecutor {
         // Teleport player to start position
         int i = new Random().nextInt(team.spawnPoints.length);
         player.teleport(team.spawnPoints[i]);
+
+        // Add Player to list if not there already
+        PVPlugin.playerInfos.add(new PlayerInfo(team, player));
 
         return true;
     }
