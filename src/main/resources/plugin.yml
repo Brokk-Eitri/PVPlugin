@@ -2,3 +2,8 @@ name: PVPlugin
 version: ${project.version}
 main: me.kitdacatsun.pvplugin.PVPlugin
 api-version: 1.16
+
+commands:
+  join:
+    description: Adds player to team
+    usage: /join <team>
