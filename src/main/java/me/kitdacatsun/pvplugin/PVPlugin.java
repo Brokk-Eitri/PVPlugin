@@ -82,7 +82,7 @@ public final class PVPlugin extends JavaPlugin {
             player.removePotionEffect(effect.getType());
         }
 
-        dispatchCommand(player, "team join NoTeam");
+        dispatchCommand(Bukkit.getConsoleSender(), "team join NoTeam");
     }
 
     public static void equip(Player player) {
@@ -91,6 +91,7 @@ public final class PVPlugin extends JavaPlugin {
         ItemStack sword = new ItemStack(Material.IRON_SWORD);
         sword.addEnchantment(Enchantment.DAMAGE_ALL, 4);
         sword.addEnchantment(Enchantment.SWEEPING_EDGE, 2);
+        sword.addEnchantment(Enchantment.KNOCKBACK, 1);
 
         ItemStack bow = new ItemStack(Material.BOW);
         bow.addEnchantment(Enchantment.ARROW_INFINITE, 1);
