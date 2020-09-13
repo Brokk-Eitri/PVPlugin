@@ -6,4 +6,5 @@ api-version: 1.16
 commands:
   join:
     description: Adds player to team
-    usage: /join <team>
+    usage: "Usage: /<command> [red|blue|none]"
+    aliases: ["join red", "join blue", "join none"]
