@@ -14,9 +14,6 @@ public class Start implements CommandExecutor {
             Location location = PVPlugin.spawnBarriers[i];
 
         }
-        // Test
-
-
 
         return false;
     }
