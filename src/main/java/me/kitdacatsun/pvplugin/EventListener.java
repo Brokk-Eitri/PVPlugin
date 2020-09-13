@@ -17,9 +17,9 @@ public class EventListener implements Listener {
         Player player = event.getPlayer();
         player.setGameMode(GameMode.ADVENTURE);
 
-        player.sendMessage("Welcome. Press one of the buttons to join Blue or Red team");
+        player.damage(25);
 
-        String commandLine = "team join NoTeam" + player.getName();
+        String commandLine = "team join NoTeam";
         getServer().dispatchCommand(player, commandLine);
     }
 
@@ -31,15 +31,14 @@ public class EventListener implements Listener {
         player.updateInventory();
         player.setHealth(20);
         player.setExp(0);
+        player.setLevel(0);
         for (PotionEffect effect : player.getActivePotionEffects()) {
             player.removePotionEffect(effect.getType());
         }
 
         String commandLine = "team join NoTeam";
         getServer().dispatchCommand(player, commandLine);
-        
-        if (inGame > 1) {
-            inGame--;
-        }
+
+        inGame.remove(player);
     }
 }

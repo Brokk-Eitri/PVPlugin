@@ -16,6 +16,6 @@ commands:
     aliases: ["eg"]
   spawn:
     description: Sends player to spawn
-  readt:
+  ready:
     description: Sets player as ready
     aliases: ["r"]

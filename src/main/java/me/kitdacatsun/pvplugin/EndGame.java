@@ -4,7 +4,12 @@ import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+
+import static me.kitdacatsun.pvplugin.PVPlugin.*;
 
 public class EndGame implements CommandExecutor {
 
@@ -14,9 +19,13 @@ public class EndGame implements CommandExecutor {
             Location location = PVPlugin.spawnBarriers[i];
             location.getBlock().setType(PVPlugin.spawnBarrierBlock);
         }
-        
-        PVPlugin.ready = 0;
-        PVPlugin.inGame = 0;
+
+        for (Player player : inGame) {
+            player.teleport(lobby);
+        }
+
+        ready = new ArrayList<>();
+        inGame = new ArrayList<>();
 
         return true;
     }

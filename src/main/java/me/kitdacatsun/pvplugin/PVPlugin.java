@@ -1,20 +1,27 @@
 package me.kitdacatsun.pvplugin;
 
 import org.bukkit.*;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class PVPlugin extends JavaPlugin {
+import java.util.ArrayList;
 
+public final class PVPlugin extends JavaPlugin {
+    
+    public static Location lobby;
+    
     public static Team[] teams;
     public static Location[] spawnBarriers;
     public static Material spawnBarrierBlock;
 
-    public static int ready;
-    public static int inGame;
+    public static ArrayList<Player> ready;
+    public static ArrayList<Player> inGame;
 
     @Override
     public void onEnable() {
         System.out.println("Started Up");
+        
+        lobby = new Location(Bukkit.getWorld("world"), 0.5, 248, 0, 0, 0);
 
         World nether = Bukkit.getWorld("world_nether");
 
@@ -38,7 +45,8 @@ public final class PVPlugin extends JavaPlugin {
 
         spawnBarrierBlock = Material.IRON_BARS;
 
-        inGame = ready = 0;
+        inGame = new ArrayList<>();
+        ready = new ArrayList<>();
 
         this.getCommand("join").setExecutor(new Join());
         this.getCommand("startgame").setExecutor(new StartGame());

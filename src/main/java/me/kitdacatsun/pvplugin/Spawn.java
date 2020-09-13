@@ -1,5 +1,7 @@
 package me.kitdacatsun.pvplugin;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -9,12 +11,12 @@ import org.jetbrains.annotations.NotNull;
 import static me.kitdacatsun.pvplugin.PVPlugin.*;
 
 public class Spawn implements CommandExecutor {
-    
+
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player) {
-            inGame--;
-            ((Player)sender).setHealth(-1);
+            inGame.remove(sender);
+            ((Player)sender).teleport(lobby);
         }
         return false;
     }
