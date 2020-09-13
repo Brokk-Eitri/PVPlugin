@@ -11,12 +11,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
 
-import static org.bukkit.Bukkit.getServer;
+import static org.bukkit.Bukkit.*;
 
 public class Join implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        sender.sendMessage(((Player)sender).getWorld().getName());
 
         // Ensure correct number of args
         if (args.length < 1) {
@@ -42,10 +43,12 @@ public class Join implements CommandExecutor {
         Player player;
         if (args.length > 1) {
             player = getServer().getPlayer(args[1]);
-        } else if (sender instanceof Player) {
-            player = (Player)sender;
         } else {
-            sender.sendMessage("No player found");
+            player = (Player)sender;
+        }
+        
+        if (player == null) {
+            sender.sendMessage("Player not found");
             return false;
         }
 
@@ -60,8 +63,8 @@ public class Join implements CommandExecutor {
         getServer().dispatchCommand(sender, commandLine);
 
         // Teleport player to start position
-        int rnd = new Random().nextInt(team.spawnPoints.length);
-        player.teleport(team.spawnPoints[rnd]);
+        int i = new Random().nextInt(team.spawnPoints.length);
+        player.teleport(team.spawnPoints[i]);
 
         return true;
     }
