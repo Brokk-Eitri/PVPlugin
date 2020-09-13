@@ -1,7 +1,13 @@
 package me.kitdacatsun.pvplugin;
 
+import net.md_5.bungee.api.chat.ItemTag;
 import org.bukkit.*;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.enchantments.EnchantmentTarget;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 
@@ -39,6 +45,8 @@ public final class PVPlugin extends JavaPlugin {
                 })
         };
 
+        teams[2].spawnReady = true;
+
         spawnBarriers = new Location[]{
                 new Location(nether, 10, 129, 0,0,0),
                 new Location(nether, 10, 130, 0,0,0),
@@ -46,7 +54,7 @@ public final class PVPlugin extends JavaPlugin {
                 new Location(nether, -10, 130, 0,0,0),
         };
 
-        spawnBarrierBlock = Material.IRON_BARS;
+        spawnBarrierBlock = Material.BLACK_STAINED_GLASS;
 
         inGame = new ArrayList<>();
         ready = new ArrayList<>();
@@ -75,6 +83,53 @@ public final class PVPlugin extends JavaPlugin {
         }
 
         dispatchCommand(player, "team join NoTeam");
+    }
+
+    public static void equip(Player player) {
+        Inventory inventory =  player.getInventory();
+
+        ItemStack sword = new ItemStack(Material.IRON_SWORD);
+        sword.addEnchantment(Enchantment.DAMAGE_ALL, 4);
+        sword.addEnchantment(Enchantment.SWEEPING_EDGE, 2);
+
+        ItemStack bow = new ItemStack(Material.BOW);
+        bow.addEnchantment(Enchantment.ARROW_INFINITE, 1);
+
+        ItemStack[] weapons = new ItemStack[] {
+                sword,
+                new ItemStack(Material.IRON_AXE),
+                bow,
+        };
+
+        for (ItemStack item : weapons) {
+            item.addUnsafeEnchantment(Enchantment.DURABILITY, 100);
+            item.addUnsafeEnchantment(Enchantment.BINDING_CURSE, 1);
+            item.addUnsafeEnchantment(Enchantment.VANISHING_CURSE, 1);
+            item.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+        }
+
+        ItemStack[] armour = new ItemStack[] {
+                new ItemStack(Material.IRON_BOOTS),
+                new ItemStack(Material.IRON_LEGGINGS),
+                new ItemStack(Material.IRON_CHESTPLATE),
+                new ItemStack(Material.IRON_HELMET),
+                new ItemStack(Material.SHIELD),
+        };
+
+        for (ItemStack item : armour) {
+            item.addUnsafeEnchantment(Enchantment.DURABILITY, 100);
+            item.addUnsafeEnchantment(Enchantment.BINDING_CURSE, 1);
+            item.addUnsafeEnchantment(Enchantment.VANISHING_CURSE, 1);
+            item.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+        }
+
+
+        inventory.addItem(weapons);
+        inventory.addItem(armour);
+        inventory.addItem(new ItemStack(Material.COOKED_PORKCHOP, 64));
+        inventory.addItem(new ItemStack(Material.ARROW));
+
+        player.updateInventory();
     }
 }
 

@@ -56,13 +56,18 @@ public class Join implements CommandExecutor {
 
         // Add player to team
         String commandLine = "team join " + team.name + " " + player.getName();
-        getServer().dispatchCommand(sender, commandLine);
+        getServer().dispatchCommand(getConsoleSender(), commandLine);
 
         // Teleport player to start position
         int rnd = new Random().nextInt(team.spawnPoints.length);
         player.teleport(team.spawnPoints[rnd]);
-        
+
+        equip(player);
         inGame.add(player);
+
+        if (team.spawnReady) {
+            getServer().dispatchCommand(player, "ready");
+        }
 
         return true;
     }

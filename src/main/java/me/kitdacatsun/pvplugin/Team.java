@@ -5,6 +5,7 @@ import org.bukkit.Location;
 public class Team {
     public String name;
     public Location[] spawnPoints;
+    public boolean spawnReady = false;
 
     public Team(String name, Location spawnPoint) {
         this.name = name;

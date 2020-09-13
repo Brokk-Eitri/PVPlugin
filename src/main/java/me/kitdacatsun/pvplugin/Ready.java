@@ -15,20 +15,27 @@ public class Ready implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player) {
-            if (!ready.contains(sender) && inGame.contains(sender)) {
-                ready.add((Player)sender);
-            }
-
-            if (ready.size() == inGame.size() && inGame.size() > 0) {
-                getServer().dispatchCommand(Bukkit.getConsoleSender(), "sg");
-            }
+            ready((Player)sender);
         }
 
         for (Player player : inGame) {
-            player.sendMessage(sender.getName() + " is ready (" + ready.size() + "/" + inGame.size() + ")");
+            if (player != sender) {
+                player.sendMessage(sender.getName() + " is ready (" + ready.size() + "/" + inGame.size() + ")");
+            } else {
+                sender.sendMessage("You are ready (" + ready.size() + "/" + inGame.size() + ")");
+            }
         }
 
-
         return false;
+    }
+
+    private void ready(Player player) {
+        if (!ready.contains(player) && inGame.contains(player)) {
+            ready.add(player);
+        }
+
+        if (ready.size() == inGame.size() && inGame.size() >= 2) {
+            getServer().dispatchCommand(Bukkit.getConsoleSender(), "sg");
+        }
     }
 }
