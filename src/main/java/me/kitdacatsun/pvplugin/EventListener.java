@@ -1,11 +1,14 @@
 package me.kitdacatsun.pvplugin;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 import static me.kitdacatsun.pvplugin.EndGame.endGame;
 import static me.kitdacatsun.pvplugin.PVPlugin.*;
@@ -35,6 +38,10 @@ public class EventListener implements Listener {
 
         inGame.remove(event.getEntity());
 
+        for (Team team : teams) {
+            team.players.remove(event.getEntity());
+        }
+
         int teamsWithPlayers = 0;
         String teamName = "";
         for (Team team : teams) {
@@ -49,7 +56,7 @@ public class EventListener implements Listener {
 
         if (teamsWithPlayers == 1) {
             getServer().broadcastMessage(teamName + " has won!");
-            endGame();
+            server.getScheduler().scheduleSyncDelayedTask(plugin, EndGame::endGame, 10);
         }
     }
 }

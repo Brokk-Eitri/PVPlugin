@@ -5,6 +5,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 
@@ -23,8 +24,14 @@ public final class PVPlugin extends JavaPlugin {
     public static ArrayList<Player> ready;
     public static ArrayList<Player> inGame;
 
+    public static Server server;
+    public static Plugin plugin;
+
     @Override
     public void onEnable() {
+        server = getServer();
+        plugin = this;
+
         System.out.println("Started Up");
 
         lobby = new Location(Bukkit.getWorld("world_nether"), 0.5, 125, 0.5, 0, 0);

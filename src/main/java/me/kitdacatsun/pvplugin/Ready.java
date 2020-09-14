@@ -29,13 +29,25 @@ public class Ready implements CommandExecutor {
         return false;
     }
 
+
+
     private void ready(Player player) {
         if (!ready.contains(player) && inGame.contains(player)) {
             ready.add(player);
         }
 
         if (ready.size() == inGame.size() && inGame.size() >= 2) {
-            getServer().dispatchCommand(Bukkit.getConsoleSender(), "sg");
+            server.getScheduler().scheduleSyncDelayedTask(plugin, () -> startingIn(3), 0);
+            server.getScheduler().scheduleSyncDelayedTask(plugin, () -> startingIn(2), 10);
+            server.getScheduler().scheduleSyncDelayedTask(plugin, () -> startingIn(1), 20);
+            server.getScheduler().scheduleSyncDelayedTask(plugin, () ->
+                    server.dispatchCommand(Bukkit.getConsoleSender(), "sg"), 30);
+        }
+    }
+
+    private static void startingIn(int t) {
+        for (Player player : inGame) {
+            player.sendMessage("Starting in " + t + "...");
         }
     }
 }
