@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import static me.kitdacatsun.pvplugin.PVPlugin.*;
-import static org.bukkit.Bukkit.getServer;
 
 public class Ready implements CommandExecutor {
 

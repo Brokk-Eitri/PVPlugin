@@ -10,6 +10,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import static org.bukkit.Bukkit.dispatchCommand;
 
@@ -31,8 +32,6 @@ public final class PVPlugin extends JavaPlugin {
     public void onEnable() {
         server = getServer();
         plugin = this;
-
-        System.out.println("Started Up");
 
         lobby = new Location(Bukkit.getWorld("world_nether"), 0.5, 125, 0.5, 0, 0);
 
@@ -58,16 +57,16 @@ public final class PVPlugin extends JavaPlugin {
                 new Location(nether, -10, 130, 0,0,0),
         };
 
-        spawnBarrierBlock = Material.BLACK_STAINED_GLASS;
+        spawnBarrierBlock = Material.WHITE_STAINED_GLASS;
 
         inGame = new ArrayList<>();
         ready = new ArrayList<>();
 
-        this.getCommand("join").setExecutor(new Join());
-        this.getCommand("startgame").setExecutor(new StartGame());
-        this.getCommand("endgame").setExecutor(new EndGame());
-        this.getCommand("spawn").setExecutor(new Spawn());
-        this.getCommand("ready").setExecutor(new Ready());
+        Objects.requireNonNull(getCommand("join")).setExecutor(new Join());
+        Objects.requireNonNull(getCommand("startgame")).setExecutor(new StartGame());
+        Objects.requireNonNull(getCommand("endgame")).setExecutor(new EndGame());
+        Objects.requireNonNull(getCommand("spawn")).setExecutor(new Spawn());
+        Objects.requireNonNull(getCommand("ready")).setExecutor(new Ready());
 
         getServer().getPluginManager().registerEvents(new EventListener(), this);
     }
@@ -129,6 +128,7 @@ public final class PVPlugin extends JavaPlugin {
         }
 
 
+        inventory.clear();
         inventory.addItem(weapons);
         inventory.addItem(armour);
         inventory.addItem(new ItemStack(Material.COOKED_PORKCHOP, 64));
