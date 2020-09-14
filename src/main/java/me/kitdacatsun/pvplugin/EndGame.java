@@ -15,6 +15,12 @@ public class EndGame implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        endGame();
+
+        return true;
+    }
+
+    public static void endGame() {
         for (int i = 0; i < PVPlugin.spawnBarriers.length; i++) {
             Location location = PVPlugin.spawnBarriers[i];
             location.getBlock().setType(PVPlugin.spawnBarrierBlock);
@@ -25,9 +31,13 @@ public class EndGame implements CommandExecutor {
             resetPlayer(player);
         }
 
+        for (Team team : teams) {
+            team.players = new ArrayList<>();
+            team.inPlay = false;
+        }
+
         ready = new ArrayList<>();
         inGame = new ArrayList<>();
 
-        return true;
     }
 }

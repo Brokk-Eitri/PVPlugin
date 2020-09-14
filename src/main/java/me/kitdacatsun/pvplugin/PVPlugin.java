@@ -1,10 +1,7 @@
 package me.kitdacatsun.pvplugin;
 
-import net.md_5.bungee.api.chat.ItemTag;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.enchantments.EnchantmentTarget;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;

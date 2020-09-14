@@ -56,10 +56,11 @@ public class Join implements CommandExecutor {
 
         // Add player to team
         String commandLine = "team join " + team.name + " " + player.getName();
+        team.inPlay = true;
         getServer().dispatchCommand(getConsoleSender(), commandLine);
         for (Player p : inGame) {
             if (p != player) {
-                p.sendMessage(player + " has joined team " + team.name);
+                p.sendMessage(player.getName() + " has joined " + team.name + " team");
             }
         }
 
@@ -69,6 +70,7 @@ public class Join implements CommandExecutor {
 
         equip(player);
         inGame.add(player);
+        team.players.add(player);
 
         if (team.spawnReady) {
             getServer().dispatchCommand(player, "ready");

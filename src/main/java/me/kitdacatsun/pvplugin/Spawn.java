@@ -14,6 +14,9 @@ public class Spawn implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player) {
             inGame.remove(sender);
+            for (Team team : teams) {
+                team.players.remove(sender);
+            }
             resetPlayer((Player)sender);
         }
         return false;
