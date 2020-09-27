@@ -9,6 +9,7 @@ public class Team {
     public String name;
     public Location[] spawnPoints;
     public ArrayList<Player> players;
+
     public boolean spawnReady = false;
     public boolean inPlay = false;
 
@@ -25,6 +26,5 @@ public class Team {
         this.name = name;
         this.spawnPoints = spawnPoints;
         players = new ArrayList<>();
-
     }
 }

@@ -46,6 +46,11 @@ public class Join implements CommandExecutor {
             return false;
         }
 
+        if (inGame.contains(player)) {
+            player.sendMessage("You are already in a team");
+            return true;
+        }
+
         // Reset player
         player.setGameMode(GameMode.ADVENTURE);
         player.setHealth(20);
@@ -74,6 +79,11 @@ public class Join implements CommandExecutor {
 
         if (team.spawnReady) {
             getServer().dispatchCommand(player, "ready");
+        }
+
+        // Set level
+        for (Player p : inGame) {
+            p.setLevel(inGame.size());
         }
 
         return true;

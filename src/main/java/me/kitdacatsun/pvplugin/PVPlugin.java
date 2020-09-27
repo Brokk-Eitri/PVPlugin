@@ -1,5 +1,9 @@
 package me.kitdacatsun.pvplugin;
 
+import org.json.simple.JSONObject;
+import org.json.simple.JSONArray;
+import org.json.simple.parser.*;
+
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -9,6 +13,8 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -22,52 +28,62 @@ public final class PVPlugin extends JavaPlugin {
     public static Location[] spawnBarriers;
     public static Material spawnBarrierBlock;
 
-    public static ArrayList<Player> ready;
-    public static ArrayList<Player> inGame;
+    public static ArrayList<Player> ready = new ArrayList<>();
+    public static ArrayList<Player> inGame = new ArrayList<>();
 
     public static Server server;
     public static Plugin plugin;
 
+    public static World overworld = Bukkit.getWorld("world");
+
     @Override
     public void onEnable() {
+        parseJSON();
+
+        registerCommands();
+
         server = getServer();
         plugin = this;
+    }
 
-        lobby = new Location(Bukkit.getWorld("world_nether"), 0.5, 125, 0.5, 0, 0);
+    private void parseJSON() {
+        Object obj = null;
+        try {
+            obj = new JSONParser().parse(new FileReader("settings.json"));
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
 
-        World nether = Bukkit.getWorld("world_nether");
+        JSONObject json = (JSONObject)obj;
 
-        teams = new Team[] {
-                new Team("Red", new Location(nether, -12.5f, 130, 0.5f,-90,0)),
-                new Team("Blue", new Location(nether, 12.5f, 130, 0.5f,90,0)),
-                new Team("None", new Location[]{
-                        new Location(nether, -40, 130, 4,-90,0),
-                        new Location(nether, -25, 130, -27,0,0),
-                        new Location(nether, 40, 132, -19,90,0),
-                        new Location(nether, 34, 130, 23,0,0),
-                })
-        };
+        float[] lobbyLocation = (float[]) json.get("lobby_location");
+        lobby = new Location(overworld, lobbyLocation[0], lobbyLocation[1], lobbyLocation[2]);
 
-        teams[2].spawnReady = true;
+        JSONArray teamJsonArray = (JSONArray) json.get("teams");
+        teams = new Team[teamJsonArray.size()];
+        for (int i = 0; i < teams.length; i++) {
+            JSONArray team = (JSONArray) json.get(teamJsonArray.get(i));
+            JSONArray location = (JSONArray) json.get(team.get(1));
+            teams[i] = new Team((String) team.get(0),
+                    new Location(overworld, (Double) location.get(0), (Double) location.get(1), (Double) location.get(2)));
+        }
 
-        spawnBarriers = new Location[]{
-                new Location(nether, 10, 129, 0,0,0),
-                new Location(nether, 10, 130, 0,0,0),
-                new Location(nether, -10, 129, 0,0,0),
-                new Location(nether, -10, 130, 0,0,0),
-        };
+        JSONArray spawnBarrierJsonArray = (JSONArray) json.get("spawn_barriers");
+        spawnBarriers = new Location[spawnBarrierJsonArray.size()];
+        for (int i = 0; i < teams.length; i++) {
+            JSONArray location = (JSONArray) json.get(spawnBarrierJsonArray.get(i));
+            spawnBarriers[i] = new Location(overworld, (Double) location.get(0), (Double) location.get(1), (Double) location.get(2));
+        }
 
-        spawnBarrierBlock = Material.WHITE_STAINED_GLASS;
+        spawnBarrierBlock = Material.getMaterial((String) json.get("spawn_barrier_block"));
+    }
 
-        inGame = new ArrayList<>();
-        ready = new ArrayList<>();
-
+    private void registerCommands() {
         Objects.requireNonNull(getCommand("join")).setExecutor(new Join());
         Objects.requireNonNull(getCommand("startgame")).setExecutor(new StartGame());
         Objects.requireNonNull(getCommand("endgame")).setExecutor(new EndGame());
         Objects.requireNonNull(getCommand("spawn")).setExecutor(new Spawn());
         Objects.requireNonNull(getCommand("ready")).setExecutor(new Ready());
-
         getServer().getPluginManager().registerEvents(new EventListener(), this);
     }
 
@@ -85,31 +101,31 @@ public final class PVPlugin extends JavaPlugin {
             player.removePotionEffect(effect.getType());
         }
 
-        dispatchCommand(Bukkit.getConsoleSender(), "team join NoTeam");
+        dispatchCommand(Bukkit.getConsoleSender(), "team join NoTeam " + player.getName());
     }
 
     public static void equip(Player player) {
         Inventory inventory =  player.getInventory();
 
         ItemStack sword = new ItemStack(Material.IRON_SWORD);
-        sword.addEnchantment(Enchantment.DAMAGE_ALL, 4);
-        sword.addEnchantment(Enchantment.SWEEPING_EDGE, 2);
-        sword.addEnchantment(Enchantment.KNOCKBACK, 1);
+        sword.addEnchantment(Enchantment.DAMAGE_ALL, 5);
+        sword.addEnchantment(Enchantment.SWEEPING_EDGE, 3);
 
         ItemStack bow = new ItemStack(Material.BOW);
         bow.addEnchantment(Enchantment.ARROW_INFINITE, 1);
+        bow.addEnchantment(Enchantment.ARROW_DAMAGE, 2);
+
+        ItemStack axe = new ItemStack(Material.IRON_AXE);
+        axe.addEnchantment(Enchantment.DAMAGE_ALL, 5);
 
         ItemStack[] weapons = new ItemStack[] {
                 sword,
-                new ItemStack(Material.IRON_AXE),
+                axe,
                 bow,
         };
 
         for (ItemStack item : weapons) {
-            item.addUnsafeEnchantment(Enchantment.DURABILITY, 100);
-            item.addUnsafeEnchantment(Enchantment.BINDING_CURSE, 1);
-            item.addUnsafeEnchantment(Enchantment.VANISHING_CURSE, 1);
-            item.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+            item.addUnsafeEnchantment(Enchantment.DURABILITY, 3);
         }
 
         ItemStack[] armour = new ItemStack[] {
@@ -121,12 +137,10 @@ public final class PVPlugin extends JavaPlugin {
         };
 
         for (ItemStack item : armour) {
-            item.addUnsafeEnchantment(Enchantment.DURABILITY, 100);
             item.addUnsafeEnchantment(Enchantment.BINDING_CURSE, 1);
-            item.addUnsafeEnchantment(Enchantment.VANISHING_CURSE, 1);
+            item.addUnsafeEnchantment(Enchantment.DURABILITY, 3);
             item.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
         }
-
 
         inventory.clear();
         inventory.addItem(weapons);
@@ -137,5 +151,3 @@ public final class PVPlugin extends JavaPlugin {
         player.updateInventory();
     }
 }
-
-

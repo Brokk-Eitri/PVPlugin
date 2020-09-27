@@ -27,7 +27,6 @@ public class EndGame implements CommandExecutor {
         }
 
         for (Player player : inGame) {
-            player.sendMessage("Game Ended");
             resetPlayer(player);
         }
 

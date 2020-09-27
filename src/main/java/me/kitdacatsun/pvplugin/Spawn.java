@@ -19,6 +19,7 @@ public class Spawn implements CommandExecutor {
             }
             resetPlayer((Player)sender);
         }
-        return false;
+
+        return true;
     }
 }

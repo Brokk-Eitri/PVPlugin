@@ -37,6 +37,9 @@ public class EventListener implements Listener {
         }
 
         inGame.remove(event.getEntity());
+        for (Player player : inGame) {
+            player.setLevel(inGame.size());
+        }
 
         for (Team team : teams) {
             team.players.remove(event.getEntity());
@@ -56,7 +59,7 @@ public class EventListener implements Listener {
 
         if (teamsWithPlayers == 1) {
             getServer().broadcastMessage(teamName + " has won!");
-            server.getScheduler().scheduleSyncDelayedTask(plugin, EndGame::endGame, 10);
+            server.getScheduler().scheduleSyncDelayedTask(plugin, EndGame::endGame, 20);
         }
     }
 }
