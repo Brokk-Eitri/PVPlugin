@@ -49,30 +49,30 @@ public final class PVPlugin extends JavaPlugin {
     private void parseJSON() {
         Object obj = null;
         try {
-            obj = new JSONParser().parse(new FileReader("settings.json"));
+            obj = new JSONParser().parse(new FileReader(getDataFolder().getAbsolutePath() + "\\settings.json"));
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
 
         JSONObject json = (JSONObject)obj;
 
-        float[] lobbyLocation = (float[]) json.get("lobby_location");
-        lobby = new Location(overworld, lobbyLocation[0], lobbyLocation[1], lobbyLocation[2]);
+        JSONArray lobbyLocation = (JSONArray) json.get("lobby_location");
+        lobby = new Location(overworld, (Long) lobbyLocation.get(0), (Long) lobbyLocation.get(1), (Long) lobbyLocation.get(2));
 
         JSONArray teamJsonArray = (JSONArray) json.get("teams");
         teams = new Team[teamJsonArray.size()];
         for (int i = 0; i < teams.length; i++) {
-            JSONArray team = (JSONArray) json.get(teamJsonArray.get(i));
-            JSONArray location = (JSONArray) json.get(team.get(1));
+            JSONArray team = (JSONArray) teamJsonArray.get(i);
+            JSONArray location = (JSONArray) team.get(1);
             teams[i] = new Team((String) team.get(0),
-                    new Location(overworld, (Double) location.get(0), (Double) location.get(1), (Double) location.get(2)));
+                    new Location(overworld, (Long) location.get(0), (Long) location.get(1), (Long) location.get(2)));
         }
 
         JSONArray spawnBarrierJsonArray = (JSONArray) json.get("spawn_barriers");
         spawnBarriers = new Location[spawnBarrierJsonArray.size()];
         for (int i = 0; i < teams.length; i++) {
-            JSONArray location = (JSONArray) json.get(spawnBarrierJsonArray.get(i));
-            spawnBarriers[i] = new Location(overworld, (Double) location.get(0), (Double) location.get(1), (Double) location.get(2));
+            JSONArray location = (JSONArray) spawnBarrierJsonArray.get(i);
+            spawnBarriers[i] = new Location(overworld, (Long) location.get(0), (Long) location.get(1), (Long) location.get(2));
         }
 
         spawnBarrierBlock = Material.getMaterial((String) json.get("spawn_barrier_block"));
