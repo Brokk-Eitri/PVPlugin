@@ -15,10 +15,9 @@ import org.bukkit.potion.PotionEffect;
 
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Objects;
+import java.util.*;
 
-import static org.bukkit.Bukkit.dispatchCommand;
+import static org.bukkit.Bukkit.*;
 
 public final class PVPlugin extends JavaPlugin {
 
@@ -38,24 +37,23 @@ public final class PVPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        parseJSON();
-
-        registerCommands();
-
         server = getServer();
         plugin = this;
+
+        parseJSON(getDataFolder().getAbsolutePath() + "\\settings.json");
+
+        registerCommands();
     }
 
-    private void parseJSON() {
-        Object obj = null;
+    private void parseJSON(String fileName) {
+        JSONObject json = null;
         try {
-            obj = new JSONParser().parse(new FileReader(getDataFolder().getAbsolutePath() + "\\settings.json"));
+            json = (JSONObject) new JSONParser().parse(new FileReader(fileName));
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
-
-        JSONObject json = (JSONObject)obj;
-
+        assert json != null;
+        
         JSONArray lobbyLocation = (JSONArray) json.get("lobby_location");
         lobby = new Location(overworld, (Long) lobbyLocation.get(0), (Long) lobbyLocation.get(1), (Long) lobbyLocation.get(2));
 
@@ -106,16 +104,19 @@ public final class PVPlugin extends JavaPlugin {
 
     public static void equip(Player player) {
         Inventory inventory =  player.getInventory();
+        inventory.clear();
 
         ItemStack sword = new ItemStack(Material.IRON_SWORD);
+        ItemStack axe = new ItemStack(Material.IRON_AXE);
+        ItemStack bow = new ItemStack(Material.BOW);
+
         sword.addEnchantment(Enchantment.DAMAGE_ALL, 5);
         sword.addEnchantment(Enchantment.SWEEPING_EDGE, 3);
 
-        ItemStack bow = new ItemStack(Material.BOW);
         bow.addEnchantment(Enchantment.ARROW_INFINITE, 1);
         bow.addEnchantment(Enchantment.ARROW_DAMAGE, 2);
+        bow.addEnchantment(Enchantment.ARROW_KNOCKBACK, 2);
 
-        ItemStack axe = new ItemStack(Material.IRON_AXE);
         axe.addEnchantment(Enchantment.DAMAGE_ALL, 5);
 
         ItemStack[] weapons = new ItemStack[] {
@@ -124,30 +125,50 @@ public final class PVPlugin extends JavaPlugin {
                 bow,
         };
 
-        for (ItemStack item : weapons) {
-            item.addUnsafeEnchantment(Enchantment.DURABILITY, 3);
-        }
-
         ItemStack[] armour = new ItemStack[] {
-                new ItemStack(Material.IRON_BOOTS),
-                new ItemStack(Material.IRON_LEGGINGS),
-                new ItemStack(Material.IRON_CHESTPLATE),
-                new ItemStack(Material.IRON_HELMET),
+                new ItemStack(Material.DIAMOND_BOOTS),
+                new ItemStack(Material.DIAMOND_LEGGINGS),
+                new ItemStack(Material.DIAMOND_CHESTPLATE),
+                new ItemStack(Material.DIAMOND_HELMET),
                 new ItemStack(Material.SHIELD),
         };
 
         for (ItemStack item : armour) {
-            item.addUnsafeEnchantment(Enchantment.BINDING_CURSE, 1);
-            item.addUnsafeEnchantment(Enchantment.DURABILITY, 3);
-            item.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+            item.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
         }
 
-        inventory.clear();
+        ArrayList<ItemStack> tools = new ArrayList<>();
+
+        tools.addAll(Arrays.asList(weapons));
+        tools.addAll(Arrays.asList(armour));
+
+        for (ItemStack t : tools) {
+            t.addEnchantment(Enchantment.BINDING_CURSE, 1);
+            t.addEnchantment(Enchantment.VANISHING_CURSE, 1);
+            t.addEnchantment(Enchantment.DURABILITY, 3);
+        }
+
         inventory.addItem(weapons);
         inventory.addItem(armour);
+
         inventory.addItem(new ItemStack(Material.COOKED_PORKCHOP, 64));
         inventory.addItem(new ItemStack(Material.ARROW));
 
         player.updateInventory();
+    }
+
+    public static void addToTeam(Player player, Team team) {
+        String commandLine = "team join " + team.name + " " + player.getName();
+        team.inPlay = true;
+        server.dispatchCommand(getConsoleSender(), commandLine);
+        for (Player p : inGame) {
+            if (p != player) {
+                p.sendMessage(player.getName() + " has joined " + team.name + " team");
+            }
+        }
+
+        player.teleport(team.spawnPoints[new Random().nextInt(team.spawnPoints.length)]);
+
+        team.players.add(player);
     }
 }
