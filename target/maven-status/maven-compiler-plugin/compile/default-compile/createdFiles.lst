@@ -1,0 +1,11 @@
+me\kitdacatsun\pvplugin\Spawn.class
+me\kitdacatsun\pvplugin\StartGame.class
+me\kitdacatsun\pvplugin\Team.class
+me\kitdacatsun\pvplugin\CommandUtils.class
+me\kitdacatsun\pvplugin\PlayerInfo.class
+me\kitdacatsun\pvplugin\CommandUtils$SelectorType.class
+me\kitdacatsun\pvplugin\EventListener.class
+me\kitdacatsun\pvplugin\Ready.class
+me\kitdacatsun\pvplugin\EndGame.class
+me\kitdacatsun\pvplugin\Join.class
+me\kitdacatsun\pvplugin\PVPlugin.class
