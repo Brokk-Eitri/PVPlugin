@@ -6,16 +6,7 @@ api-version: 1.16
 commands:
   join:
     description: Adds player to team
-    usage: "Usage: /<command> [red|blue|none]"
-    aliases: ["join Red", "join Blue", "join None"]
-  startgame:
-    description: Starts the game
-    aliases: ["sg"]
-  endgame:
-    description: Ends the game
-    aliases: ["eg"]
-  spawn:
-    description: Sends player to spawn
+    usage: "Usage: /<command> <red/blue>"
   ready:
-    description: Sets player as ready
-    aliases: ["r"]
+    description: Ready's player
+    usage: "Usage: /<command>"

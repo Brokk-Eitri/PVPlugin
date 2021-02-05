@@ -7,24 +7,12 @@ import java.util.ArrayList;
 
 public class Team {
     public String name;
-    public Location[] spawnPoints;
-    public ArrayList<Player> players;
+    public Location spawnPosition;
+    public ArrayList<Player> members;
 
-    public boolean spawnReady = false;
-    public boolean inPlay = false;
-
-    public Team(String name, Location spawnPoint) {
+    public Team(String name, Location spawnPosition) {
         this.name = name;
-        spawnPoints = new Location[]{
-                spawnPoint
-        };
-        
-        players = new ArrayList<>();
-    }
-
-    public Team(String name, Location[] spawnPoints) {
-        this.name = name;
-        this.spawnPoints = spawnPoints;
-        players = new ArrayList<>();
+        this.spawnPosition = spawnPosition;
+        members = new ArrayList<>();
     }
 }

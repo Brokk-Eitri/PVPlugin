@@ -88,42 +88,6 @@ public class CommandUtils {
                 return null;
             }
             return ents;
-        } else if (arg.startsWith("@a")) {
-            // ents = new Entity[maxEnts];
-            List<Entity> listOfValidEntities = new ArrayList<>();
-            int C = getLimit(arg);
-
-            boolean usePlayers = true;
-            for (String tag : tags) {
-                if (hasTag(SelectorType.TYPE, tag)) {
-                    usePlayers = false;
-                    break;
-                }
-            }
-            List<Entity> ea = new ArrayList<Entity>(Bukkit.getOnlinePlayers());
-            if (!usePlayers) {
-                ea.clear();
-                for (World w : getAcceptedWorldsFullString(loc, arg)) {
-                    ea.addAll(w.getEntities());
-                }
-            }
-            for (Entity e : ea) {
-                if (listOfValidEntities.size() >= C)
-                    break;
-                boolean isValid = true;
-                for (int b = 0; b < tags.length; b++) {
-                    if (!canBeAccepted(tags[b], e, loc)) {
-                        isValid = false;
-                        break;
-                    }
-                }
-                if (isValid) {
-                    listOfValidEntities.add(e);
-                }
-            }
-
-            ents = listOfValidEntities.toArray(new Entity[listOfValidEntities.size()]);
-
         } else if (arg.startsWith("@p")) {
             ents = new Entity[1];
             double closestInt = Double.MAX_VALUE;
